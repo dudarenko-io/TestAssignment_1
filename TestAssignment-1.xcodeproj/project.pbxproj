@@ -8,21 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		09334E4F1E7E9BBD00F550B2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09334E4E1E7E9BBD00F550B2 /* AppDelegate.swift */; };
-		09334E511E7E9BBD00F550B2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09334E501E7E9BBD00F550B2 /* ViewController.swift */; };
 		09334E541E7E9BBD00F550B2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09334E521E7E9BBD00F550B2 /* Main.storyboard */; };
 		09334E571E7E9BBD00F550B2 /* TestAssignment_1.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 09334E551E7E9BBD00F550B2 /* TestAssignment_1.xcdatamodeld */; };
 		09334E591E7E9BBD00F550B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09334E581E7E9BBD00F550B2 /* Assets.xcassets */; };
 		09334E5C1E7E9BBD00F550B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09334E5A1E7E9BBD00F550B2 /* LaunchScreen.storyboard */; };
 		09334E651E7E9D9600F550B2 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 09334E641E7E9D9600F550B2 /* README */; };
 		09334E691E7E9DCB00F550B2 /* Backlog in Resources */ = {isa = PBXBuildFile; fileRef = 09334E681E7E9DCB00F550B2 /* Backlog */; };
+		09334E6B1E7EB08900F550B2 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09334E6A1E7EB08900F550B2 /* CoreDataStack.swift */; };
+		09334E6D1E7EB43200F550B2 /* NewsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09334E6C1E7EB43200F550B2 /* NewsListViewController.swift */; };
+		09334E6F1E7EC35500F550B2 /* PayloadService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09334E6E1E7EC35500F550B2 /* PayloadService.swift */; };
 		E618E4A75087182821A218D8 /* Pods_TestAssignment_1.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17552389210129C50DC3ABB8 /* Pods_TestAssignment_1.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		0153AD77117890D602A0DD8D /* Pods-TestAssignment-1.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestAssignment-1.release.xcconfig"; path = "Pods/Target Support Files/Pods-TestAssignment-1/Pods-TestAssignment-1.release.xcconfig"; sourceTree = "<group>"; };
 		09334E4B1E7E9BBD00F550B2 /* TestAssignment-1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TestAssignment-1.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		09334E4E1E7E9BBD00F550B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		09334E501E7E9BBD00F550B2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		09334E4E1E7E9BBD00F550B2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "TestAssignment-1/AppDelegate.swift"; sourceTree = "<group>"; };
 		09334E531E7E9BBD00F550B2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		09334E561E7E9BBD00F550B2 /* TestAssignment_1.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TestAssignment_1.xcdatamodel; sourceTree = "<group>"; };
 		09334E581E7E9BBD00F550B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -30,6 +31,9 @@
 		09334E5D1E7E9BBD00F550B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		09334E641E7E9D9600F550B2 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = SOURCE_ROOT; };
 		09334E681E7E9DCB00F550B2 /* Backlog */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Backlog; sourceTree = "<group>"; };
+		09334E6A1E7EB08900F550B2 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
+		09334E6C1E7EB43200F550B2 /* NewsListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsListViewController.swift; path = UI/NewsListViewController.swift; sourceTree = "<group>"; };
+		09334E6E1E7EC35500F550B2 /* PayloadService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PayloadService.swift; path = Logic/PayloadService.swift; sourceTree = "<group>"; };
 		11BE060E1537907BC8B81B3C /* Pods-TestAssignment-1.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TestAssignment-1.debug.xcconfig"; path = "Pods/Target Support Files/Pods-TestAssignment-1/Pods-TestAssignment-1.debug.xcconfig"; sourceTree = "<group>"; };
 		17552389210129C50DC3ABB8 /* Pods_TestAssignment_1.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TestAssignment_1.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -52,6 +56,7 @@
 				09334E641E7E9D9600F550B2 /* README */,
 				09334E681E7E9DCB00F550B2 /* Backlog */,
 				09334E4D1E7E9BBD00F550B2 /* TestAssignment-1 */,
+				09334E4E1E7E9BBD00F550B2 /* AppDelegate.swift */,
 				09334E4C1E7E9BBD00F550B2 /* Products */,
 				FBBE12EEBF76AC2A21FD4FB9 /* Pods */,
 				487370BD1BF67E0BFC9DC81F /* Frameworks */,
@@ -69,11 +74,9 @@
 		09334E4D1E7E9BBD00F550B2 /* TestAssignment-1 */ = {
 			isa = PBXGroup;
 			children = (
-				09334E4E1E7E9BBD00F550B2 /* AppDelegate.swift */,
-				09334E501E7E9BBD00F550B2 /* ViewController.swift */,
-				09334E521E7E9BBD00F550B2 /* Main.storyboard */,
+				09334E711E7EC37900F550B2 /* UI */,
+				09334E701E7EC37300F550B2 /* Logic */,
 				09334E631E7E9CBB00F550B2 /* Supporting files */,
-				09334E551E7E9BBD00F550B2 /* TestAssignment_1.xcdatamodeld */,
 			);
 			path = "TestAssignment-1";
 			sourceTree = "<group>";
@@ -86,6 +89,25 @@
 				09334E5D1E7E9BBD00F550B2 /* Info.plist */,
 			);
 			name = "Supporting files";
+			sourceTree = "<group>";
+		};
+		09334E701E7EC37300F550B2 /* Logic */ = {
+			isa = PBXGroup;
+			children = (
+				09334E551E7E9BBD00F550B2 /* TestAssignment_1.xcdatamodeld */,
+				09334E6E1E7EC35500F550B2 /* PayloadService.swift */,
+				09334E6A1E7EB08900F550B2 /* CoreDataStack.swift */,
+			);
+			name = Logic;
+			sourceTree = "<group>";
+		};
+		09334E711E7EC37900F550B2 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				09334E521E7E9BBD00F550B2 /* Main.storyboard */,
+				09334E6C1E7EB43200F550B2 /* NewsListViewController.swift */,
+			);
+			name = UI;
 			sourceTree = "<group>";
 		};
 		487370BD1BF67E0BFC9DC81F /* Frameworks */ = {
@@ -230,9 +252,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				09334E511E7E9BBD00F550B2 /* ViewController.swift in Sources */,
 				09334E4F1E7E9BBD00F550B2 /* AppDelegate.swift in Sources */,
 				09334E571E7E9BBD00F550B2 /* TestAssignment_1.xcdatamodeld in Sources */,
+				09334E6B1E7EB08900F550B2 /* CoreDataStack.swift in Sources */,
+				09334E6F1E7EC35500F550B2 /* PayloadService.swift in Sources */,
+				09334E6D1E7EB43200F550B2 /* NewsListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
