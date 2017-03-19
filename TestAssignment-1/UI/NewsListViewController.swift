@@ -7,9 +7,11 @@
 //
 
 import UIKit
-import Alamofire
 
 class NewsListViewController: UITableViewController {
+    
+    var titles = [String]()
+    let service = PayloadService()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -17,7 +19,16 @@ class NewsListViewController: UITableViewController {
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
-
+        
+        service.fetchPayload { (error, titles) in
+            // TODO: weakify self
+            if error != nil {
+                // TODO: log and/or popup
+                return
+            }
+            self.titles = titles
+            self.tableView.reloadData()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -28,27 +39,23 @@ class NewsListViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 0
+        return titles.count
     }
 
-    /*
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath)
 
         // Configure the cell...
 
         return cell
     }
-    */
     
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        cell.textLabel?.text =
+        cell.textLabel?.text = titles[indexPath.row]
     }
 
     /*
