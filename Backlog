@@ -17,3 +17,4 @@ Tasks:
 - Master-detail UI
 - Pull-to-refresh
 - JSON содержит текст различной длины, в связи с этим следует использовать ячейки переменной высоты
+- Splash-screen
