@@ -12,14 +12,29 @@ class NewsListViewController: UITableViewController {
     
     var titles = [String]()
     let service = PayloadService()
+    let tableRefreshControl = UIRefreshControl()
+    
+    // MARK: - View Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 88
         
+        tableRefreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
+        tableView.refreshControl = tableRefreshControl
+        
+        tableRefreshControl.beginRefreshing()
+        reloadData()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    @objc fileprivate func reloadData() {
         service.fetchPayload { (error, titles) in
             // TODO: weakify self
             if error != nil {
@@ -28,12 +43,8 @@ class NewsListViewController: UITableViewController {
             }
             self.titles = titles
             self.tableView.reloadData()
+            self.tableRefreshControl.endRefreshing()
         }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
@@ -50,22 +61,25 @@ class NewsListViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell", for: indexPath)
 
         // Configure the cell...
+        if let newsCell = cell as? NewsTableViewCell {
+            newsCell.title = titles[indexPath.row]
+        }
 
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.textLabel?.text = titles[indexPath.row]
+    // MARK: - Table view delegate
+    
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 88.0
     }
 
-    /*
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        if let detailVC = segue.destination as? NewsDetailViewController,
+            let cell = sender as? NewsTableViewCell {
+                detailVC.contentID = "7924"
+        }
     }
-    */
-
 }
