@@ -7,39 +7,68 @@
 //
 
 import UIKit
-import WebKit
 
 class NewsDetailViewController: UIViewController {
     
     let service = PayloadService()
     var contentID: String?
     
+    @IBOutlet weak private var contentTextView: UITextView!
+    
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isTranslucent = false
+
+        self.automaticallyAdjustsScrollViewInsets = false
         
         guard let identifier = contentID else {
+            // error
             return
         }
         
         service.fetchDetailsForPayload(with: identifier) { (error, content) in
             if error != nil {
-                // show error
+                // show downloading error
+                print("downloading error")
                 return
             }
             
-            let webView = WKWebView(frame: self.view.bounds)
-            webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            // add css?
-            webView.loadHTMLString(content, baseURL: nil)
-            self.view.addSubview(webView)
+            if let string = self.attributedText(for: content) {
+                self.contentTextView.attributedText = string
+            } else {
+                // show processing error
+                print("processing error")
+            }
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        navigationController?.navigationBar.isTranslucent = true
+    // MARK: - Content Processing
+    
+    private func attributedText(for content:String) -> NSAttributedString? {
+        guard let encodedData = content.data(using: String.Encoding.utf8) else {
+            return nil
+        }
+        
+        let documentAttributes: [String: Any] = [
+            NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,
+            NSCharacterEncodingDocumentAttribute: String.Encoding.utf8.rawValue
+        ]
+        
+        guard let attributedString = try? NSMutableAttributedString(data: encodedData,
+                                                                 options: documentAttributes,
+                                                                 documentAttributes: nil)
+        else {
+            return nil
+        }
+        
+        let fontAttributes: [String: Any] = [
+            NSFontAttributeName : UIFont.systemFont(ofSize: 16.0)
+        ]
+        
+        let range = NSRange(location: 0, length: attributedString.length)
+        attributedString.addAttributes(fontAttributes, range: range)
+        
+        return (attributedString.copy() as! NSAttributedString)
     }
 }

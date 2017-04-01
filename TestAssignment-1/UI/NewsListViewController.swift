@@ -70,15 +70,15 @@ class NewsListViewController: UITableViewController {
     
     // MARK: - Table view delegate
     
-//    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 88.0
-//    }
+    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 88.0
+    }
 
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let detailVC = segue.destination as? NewsDetailViewController,
-            let cell = sender as? UITableViewCell {
+            let cell = sender as? NewsTableViewCell {
                 detailVC.contentID = "7924"
         }
     }
