@@ -40,6 +40,24 @@ class CoreDataStack {
         return container
     }()
     
+    lazy var viewContext: NSManagedObjectContext = {
+        return self.persistentContainer.viewContext
+    }()
+    
+    lazy var backgroundContext: NSManagedObjectContext = {
+        return self.persistentContainer.newBackgroundContext()
+    }()
+    
+    func performForegroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
+        self.viewContext.perform {
+            block(self.viewContext)
+        }
+    }
+    
+    func performBackgroundTask(_ block: @escaping (NSManagedObjectContext) -> Void) {
+        self.persistentContainer.performBackgroundTask(block)
+    }
+    
     // MARK: - Core Data Saving support
     
     func saveContext () {

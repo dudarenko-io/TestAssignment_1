@@ -10,8 +10,8 @@ import UIKit
 
 class NewsListViewController: UITableViewController {
     
-    var titles = [String]()
-    let service = PayloadService()
+    var titles = [NewsCellViewModel]()
+    let service = NewsService()
     let tableRefreshControl = UIRefreshControl()
     
     // MARK: - View Life Cycle
@@ -35,15 +35,9 @@ class NewsListViewController: UITableViewController {
     }
     
     @objc fileprivate func reloadData() {
-        service.fetchPayload { (error, titles) in
-            // TODO: weakify self
-            if error != nil {
-                // TODO: log and/or popup
-                return
-            }
-            self.titles = titles
+        service.obtainNews { (viewModels) in
+            self.titles.append(contentsOf: viewModels)
             self.tableView.reloadData()
-            self.tableRefreshControl.endRefreshing()
         }
     }
 
@@ -62,7 +56,7 @@ class NewsListViewController: UITableViewController {
 
         // Configure the cell...
         if let newsCell = cell as? NewsTableViewCell {
-            newsCell.title = titles[indexPath.row]
+            newsCell.configure(with: titles[indexPath.row])
         }
 
         return cell
