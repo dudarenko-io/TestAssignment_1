@@ -72,6 +72,7 @@ class NewsService {
                     } catch let error {
                         print(error)
                         print("failed to save data in context")
+                        assert(false)
                         DispatchQueue.main.async {
                             completion(error)
                         }
@@ -93,34 +94,64 @@ class NewsService {
         // загружаем
         // парсим
         // кладем в базу
-        
-        
-//        let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
-//        fetchRequest.predicate = NSPredicate(format: "identifier == %@", identifier)
-//        do {
-//            let result = try self.coreDataStack.viewContext.fetch(fetchRequest)
-//        } catch let error {
-//            print("fetching error")
-//            completion(error, nil)
-//        }
-        
-//        if let newsDetail = re
-        
-        
-        webService.fetchNewsDetail(with: identifier) { (error, json) in
-            if error != nil {
-                // error
-                print("error loading data")
+        self.coreDataStack.backgroundContext.perform {
+            let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "identifier == %d", identifier)
+            
+            guard let result = try? self.coreDataStack.backgroundContext.fetch(fetchRequest) else {
+                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
+                DispatchQueue.main.async {
+                    completion(err, nil)
+                }
                 return
             }
             
-            if let newsDetail = self.parser.deserializeNewsDetail(json) {
+            assert(result.count == 1)
+            
+            let newsTitle = result.first
+            if let newsDetail = newsTitle?.newsDetail {
                 let viewModel = NewsDetailViewModel(with: newsDetail)
-                completion(nil, viewModel)
-            } else {
-                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
-                completion(err, nil)
+                DispatchQueue.main.async {
+                    completion(nil, viewModel)
+                }
+                return
+            }
+            
+            self.webService.fetchNewsDetail(with: identifier) { (error, json) in
+                if error != nil {
+                    // error
+                    print("error loading data")
+                    return
+                }
+                self.coreDataStack.backgroundContext.perform {
+                    if let newsDetail = self.parser.deserializeNewsDetail(json) {
+                        newsTitle?.newsDetail = newsDetail
+                        do {
+                            try self.coreDataStack.backgroundContext.save()
+                        } catch {
+                            print("failed to save data in context")
+                            assert(false)
+                            let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
+                            DispatchQueue.main.async {
+                                completion(err, nil)
+                            }
+                        }
+                        
+                        let viewModel = NewsDetailViewModel(with: newsDetail)
+                        DispatchQueue.main.async {
+                            completion(nil, viewModel)
+                        }
+                    } else {
+                        let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
+                        DispatchQueue.main.async {
+                            completion(err, nil)
+                        }
+                    }
+                }
             }
         }
+        
+        
+
     }
 }
