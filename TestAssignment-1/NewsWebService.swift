@@ -38,7 +38,7 @@ class NewsWebService {
     }
     
     // загрузка деталей новости
-    func fetchNewsDetail(with identifier: String,
+    func fetchNewsDetail(with identifier: Int,
                                 andCompletion completion:@escaping (Error?, [String:Any])->())
     {
         let parameters: Parameters = ["id": identifier]

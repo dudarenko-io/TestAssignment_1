@@ -14,7 +14,7 @@ import CoreData
  */
 class NewsParser {
     
-    fileprivate let context: NSManagedObjectContext
+    private let context: NSManagedObjectContext
     
     // MARK: - Init
     
@@ -30,9 +30,21 @@ class NewsParser {
             var titles = [NewsTitle]()
             for item in payload {
                 let newsTitle = self.createNewsTitle()
-                newsTitle.text = item["text"] as? String
-                newsTitle.publicationDate = item["publicationDate"] as? NSDate
-                newsTitle.identifier = item[""] as? Int64 ?? 0
+                if let title = item["text"] as? String {
+                    newsTitle.text = title
+                }
+                if let publicationDate = item["publicationDate"] as? [String:Any],
+                    let milliseconds = publicationDate["milliseconds"] as? Int
+                {
+                    let date = Date.init(timeIntervalSince1970: Double(milliseconds/1000))
+                    newsTitle.publicationDate = date as NSDate?
+                }
+                
+                if let identifierString = item["id"] as? String,
+                    let identifier = Int64(identifierString)
+                {
+                    newsTitle.identifier = identifier
+                }
                 
                 titles.append(newsTitle)
             }

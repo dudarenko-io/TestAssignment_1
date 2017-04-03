@@ -11,7 +11,7 @@ import UIKit
 class NewsDetailViewController: UIViewController {
     
     let service = NewsService()
-    var contentID: String?
+    var contentID: Int?
     
     @IBOutlet weak private var contentTextView: UITextView!
     
@@ -27,7 +27,7 @@ class NewsDetailViewController: UIViewController {
             return
         }
         
-        service.obtainNewsDetail(with: identifier) { (viewModel) in
+        service.obtainNewsDetail(with: identifier) { (error, viewModel) in
             guard let newsDetail = viewModel else {
                 // error
                 print("error")

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 /**
  * Сервис, предоставляющий данные в UI 
@@ -20,37 +21,91 @@ class NewsService {
         return NewsParser(with: self.coreDataStack.backgroundContext)
     }()
     
-    func obtainNews(with completion:@escaping([NewsCellViewModel])->()){
+    var viewContext:NSManagedObjectContext {
+        return coreDataStack.viewContext
+    }
+    
+    func obtainNews(with completion:@escaping(Error?)->()){
         // запрос
-        // парсинг
-        // сохранение в базе
-        
         webService.fetchNews { (error, json) in
             if error != nil {
                 // error
                 print("error loading data")
+                completion(error)
                 return
             }
             
-            if let titles = self.parser.deserializeNewsList(json) {
-                let viewModels = titles.map({ (title) -> NewsCellViewModel in
-                    return NewsCellViewModel(with: title)
+            
+            var storedNewsIDs: Set<Int64>
+            let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
+            do{
+                let result = try self.coreDataStack.viewContext.fetch(fetchRequest)
+                let ids = result.map({ (title) -> Int64 in
+                    return title.identifier
                 })
-                completion(viewModels)
+                storedNewsIDs = Set.init(ids)
+            } catch {
+                print("fetching error")
+                return
+            }
+            
+            // парсинг
+            // FIXME: - перенести в поток контекста
+            if let newsTitles = self.parser.deserializeNewsList(json) {
+                // поиск дубликатов
+                for title in newsTitles {
+                    if storedNewsIDs.contains(title.identifier) {
+                        self.coreDataStack.backgroundContext.perform {
+                            self.coreDataStack.backgroundContext.delete(title)
+                        }
+                    }
+                }
+
+                
+                // сохранение в базе
+                self.coreDataStack.backgroundContext.perform {
+                    do {
+                        try self.coreDataStack.backgroundContext.save()
+                        DispatchQueue.main.async {
+                            completion(nil)
+                        }
+                    } catch let error {
+                        print(error)
+                        print("failed to save data in context")
+                        DispatchQueue.main.async {
+                            completion(error)
+                        }
+                        return
+                    }
+                }
             } else {
                 print("error parsing data")
-                completion([NewsCellViewModel]())
+                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
+                completion(err)
             }
         }
     }
     
-    func obtainNewsDetail(with identifier:String, and completion:@escaping(NewsDetailViewModel?)->()){
+    func obtainNewsDetail(with identifier:Int, and completion:@escaping(Error?, NewsDetailViewModel?)->()){
         // проверка в базе
         // если есть, то показываем
         // если нет, то 
         // загружаем
         // парсим
         // кладем в базу
+        
+        
+//        let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
+//        fetchRequest.predicate = NSPredicate(format: "identifier == %@", identifier)
+//        do {
+//            let result = try self.coreDataStack.viewContext.fetch(fetchRequest)
+//        } catch let error {
+//            print("fetching error")
+//            completion(error, nil)
+//        }
+        
+//        if let newsDetail = re
+        
         
         webService.fetchNewsDetail(with: identifier) { (error, json) in
             if error != nil {
@@ -61,9 +116,10 @@ class NewsService {
             
             if let newsDetail = self.parser.deserializeNewsDetail(json) {
                 let viewModel = NewsDetailViewModel(with: newsDetail)
-                completion(viewModel)
+                completion(nil, viewModel)
             } else {
-                completion(nil)
+                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
+                completion(err, nil)
             }
         }
     }

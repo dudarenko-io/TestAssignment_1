@@ -21,7 +21,10 @@ class NewsTableViewCell: UITableViewCell {
         }
     }
     
+    var newsIdentifier: Int?
+    
     func configure(with viewModel:NewsCellViewModel) {
         title = viewModel.text
+        newsIdentifier = viewModel.identifier
     }
 }
