@@ -10,8 +10,8 @@ import UIKit
 
 class NewsDetailViewController: UIViewController {
     
-    let service = PayloadService()
-    var contentID: String?
+    let service = NewsService()
+    var contentID: Int?
     
     @IBOutlet weak private var contentTextView: UITextView!
     
@@ -27,14 +27,14 @@ class NewsDetailViewController: UIViewController {
             return
         }
         
-        service.fetchDetailsForPayload(with: identifier) { (error, content) in
-            if error != nil {
-                // show downloading error
-                print("downloading error")
+        service.obtainNewsDetail(with: identifier) { (error, viewModel) in
+            guard let newsDetail = viewModel else {
+                // error
+                print("error")
                 return
             }
             
-            if let string = self.attributedText(for: content) {
+            if let string = self.attributedText(for: newsDetail.newsContent) {
                 self.contentTextView.attributedText = string
             } else {
                 // show processing error

@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="1" systemVersion="11A491" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
-    <elements/>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="16C67" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="NewsRecord" representedClassName=".NewsRecord" syncable="YES">
+        <attribute name="content" attributeType="String" syncable="YES"/>
+        <relationship name="title" maxCount="1" deletionRule="Nullify" destinationEntity="NewsTitle" inverseName="newsDetail" inverseEntity="NewsTitle" syncable="YES"/>
+    </entity>
+    <entity name="NewsTitle" representedClassName=".NewsTitle" syncable="YES">
+        <attribute name="identifier" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="publicationDate" attributeType="Date" usesScalarValueType="NO" syncable="YES"/>
+        <attribute name="text" attributeType="String" syncable="YES"/>
+        <relationship name="newsDetail" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="NewsRecord" inverseName="title" inverseEntity="NewsRecord" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="NewsTitle" positionX="-324" positionY="-9" width="128" height="103"/>
+        <element name="NewsRecord" positionX="-65" positionY="18" width="128" height="73"/>
+    </elements>
 </model>

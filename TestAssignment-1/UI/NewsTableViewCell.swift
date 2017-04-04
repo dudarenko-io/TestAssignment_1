@@ -12,7 +12,7 @@ class NewsTableViewCell: UITableViewCell {
     
     @IBOutlet weak fileprivate var titleLabel: UILabel!
     
-    var title: String {
+    fileprivate var title: String {
         set {
             titleLabel.text = String(htmlEncodedString: newValue) ?? ""
         }
@@ -20,16 +20,11 @@ class NewsTableViewCell: UITableViewCell {
             return titleLabel.text ?? ""
         }
     }
-
-//    override func awakeFromNib() {
-//        super.awakeFromNib()
-//        // Initialization code
-//    }
-//
-//    override func setSelected(_ selected: Bool, animated: Bool) {
-//        super.setSelected(selected, animated: animated)
-//
-//        // Configure the view for the selected state
-//    }
-
+    
+    var newsIdentifier: Int?
+    
+    func configure(with viewModel:NewsCellViewModel) {
+        title = viewModel.text
+        newsIdentifier = viewModel.identifier
+    }
 }
