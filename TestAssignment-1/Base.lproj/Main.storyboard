@@ -1,11 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2JM-7U-Id7">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2JM-7U-Id7">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -20,14 +17,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="NewsTableViewCell" id="myK-vQ-Cj1" customClass="NewsTableViewCell" customModule="TestAssignment_1" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="myK-vQ-Cj1" id="1vS-QX-6o0">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                    <frame key="frameInset" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bxQ-Sq-xTe">
-                                            <rect key="frame" x="18" y="8" width="339" height="27.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
@@ -70,7 +66,6 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Wo5-f6-dj6">
-                                <rect key="frame" x="16" y="64" width="343" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -79,10 +74,10 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="OSy-dJ-Mk7" firstAttribute="top" secondItem="Wo5-f6-dj6" secondAttribute="bottom" id="NSk-EY-BjZ"/>
-                            <constraint firstItem="Wo5-f6-dj6" firstAttribute="leading" secondItem="LEV-Tz-vxr" secondAttribute="leadingMargin" id="aiQ-8x-ggb"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="Wo5-f6-dj6" secondAttribute="trailing" id="cQ8-5t-uju"/>
-                            <constraint firstItem="Wo5-f6-dj6" firstAttribute="top" secondItem="mJj-4W-xc2" secondAttribute="bottom" id="vGx-8t-WWr"/>
+                            <constraint firstItem="Wo5-f6-dj6" firstAttribute="top" secondItem="mJj-4W-xc2" secondAttribute="bottom" id="PMu-YD-ypI"/>
+                            <constraint firstAttribute="trailing" secondItem="Wo5-f6-dj6" secondAttribute="trailing" id="WUO-oH-qWc"/>
+                            <constraint firstItem="Wo5-f6-dj6" firstAttribute="leading" secondItem="LEV-Tz-vxr" secondAttribute="leading" id="Xh0-5D-1gJ"/>
+                            <constraint firstItem="OSy-dJ-Mk7" firstAttribute="top" secondItem="Wo5-f6-dj6" secondAttribute="bottom" id="bWG-N1-u1P"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="News Detail" id="JGT-mg-tdg"/>
