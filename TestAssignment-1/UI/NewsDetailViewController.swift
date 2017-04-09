@@ -10,7 +10,7 @@ import UIKit
 
 class NewsDetailViewController: UIViewController {
     
-    let service = NewsService()
+    var service: NewsService!
     var contentID: Int?
     
     @IBOutlet weak private var contentTextView: UITextView!
@@ -20,22 +20,26 @@ class NewsDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.automaticallyAdjustsScrollViewInsets = false
+        contentTextView.text = ""
+        contentTextView.textContainerInset = UIEdgeInsetsMake(10, 10, 0, 10)
+        
+        automaticallyAdjustsScrollViewInsets = false
         
         guard let identifier = contentID else {
             // error
             return
         }
         
-        service.obtainNewsDetail(with: identifier) { (error, viewModel) in
+        service.obtainNewsDetail(with: identifier) { [weak self] (error, viewModel) in
             guard let newsDetail = viewModel else {
                 // error
+                self?.showAlert(with: error)
                 print("error")
                 return
             }
-            
-            if let string = self.attributedText(for: newsDetail.newsContent) {
-                self.contentTextView.attributedText = string
+        
+            if let string = self?.attributedText(for: newsDetail.newsContent) {
+                self?.contentTextView.attributedText = string
             } else {
                 // show processing error
                 print("processing error")
@@ -70,5 +74,13 @@ class NewsDetailViewController: UIViewController {
         attributedString.addAttributes(fontAttributes, range: range)
         
         return (attributedString.copy() as! NSAttributedString)
+    }
+    
+    func showAlert(with error:Error) {
+        let alert = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ок", style: .default) { _ in
+            let _ = self.navigationController?.popViewController(animated: true)
+        }
+        alert.addAction(action)
     }
 }

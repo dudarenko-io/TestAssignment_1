@@ -64,8 +64,10 @@ class NewsListViewController: UITableViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let detailVC = segue.destination as? NewsDetailViewController,
-            let cell = sender as? NewsTableViewCell {
-                detailVC.contentID = cell.newsIdentifier
+            let cell = sender as? NewsTableViewCell
+        {
+            detailVC.service = service
+            detailVC.contentID = cell.newsIdentifier
         }
     }
 }
