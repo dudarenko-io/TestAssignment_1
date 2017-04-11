@@ -8,6 +8,7 @@
 
 import Foundation
 import Alamofire
+import AlamofireNetworkActivityIndicator
 
 /**
  * Сервис, загружающий данные
@@ -17,6 +18,10 @@ class NewsWebService {
     fileprivate struct URLs {
         static let newsList = "https://api.tinkoff.ru/v1/news"
         static let newsDetail = "https://api.tinkoff.ru/v1/news_content"
+    }
+    
+    init() {
+        NetworkActivityIndicatorManager.shared.isEnabled = true
     }
     
     // загрузка списка новостей

@@ -33,7 +33,7 @@ class NewsDetailViewController: UIViewController {
         service.obtainNewsDetail(with: identifier) { [weak self] (error, viewModel) in
             guard let newsDetail = viewModel else {
                 // error
-                self?.showAlert(with: error)
+//                self?.showAlert(with: error)
                 print("error")
                 return
             }

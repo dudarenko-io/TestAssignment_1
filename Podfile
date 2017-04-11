@@ -7,5 +7,6 @@ target 'TestAssignment-1' do
 
   # Pods for TestAssignment-1
   pod 'Alamofire'
+  pod 'AlamofireNetworkActivityIndicator', '~> 2.0'
 
 end
