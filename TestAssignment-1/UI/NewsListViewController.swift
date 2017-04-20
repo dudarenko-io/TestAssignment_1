@@ -12,8 +12,10 @@ import CoreData
 class NewsListViewController: UITableViewController {
     
     let service = NewsService()
-    let tableRefreshControl = UIRefreshControl()
     var dataSource: FetchedResultsControllerDataSource!
+    
+    fileprivate static let publicationDateKey = "publicationDate"
+    fileprivate let tableRefreshControl = UIRefreshControl()
     
     // MARK: - View Life Cycle
 
@@ -22,7 +24,7 @@ class NewsListViewController: UITableViewController {
         
         dataSource = FetchedResultsControllerDataSource(with: tableView)
         let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "publicationDate", ascending: false)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: NewsListViewController.publicationDateKey, ascending: false)]
         let resultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                        managedObjectContext: service.viewContext,
                                                        sectionNameKeyPath: nil,
@@ -53,12 +55,6 @@ class NewsListViewController: UITableViewController {
             self.tableRefreshControl.endRefreshing()
         }
     }
-    
-    // MARK: - Table view delegate
-    
-//    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-//        return 88.0
-//    }
 
     // MARK: - Navigation
 
