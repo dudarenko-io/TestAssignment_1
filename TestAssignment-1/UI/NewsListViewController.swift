@@ -12,7 +12,17 @@ import CoreData
 class NewsListViewController: UITableViewController {
     
     let service = NewsService()
-    var dataSource: FetchedResultsControllerDataSource!
+    
+    lazy var dataSource: FetchedResultsControllerDataSource = {
+        var dataSource = FetchedResultsControllerDataSource(with: self.tableView)
+        let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: NewsListViewController.publicationDateKey, ascending: false)]
+        let resultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+                                                           managedObjectContext: self.service.viewContext,
+                                                           sectionNameKeyPath: nil,
+                                                           cacheName: nil)
+        return dataSource
+    }()
     
     fileprivate static let publicationDateKey = "publicationDate"
     fileprivate let tableRefreshControl = UIRefreshControl()
@@ -45,12 +55,14 @@ class NewsListViewController: UITableViewController {
         tableRefreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
         tableView.refreshControl = tableRefreshControl
         
-        tableRefreshControl.beginRefreshing()
         reloadData()
         tableView.reloadData()
     }
     
     @objc fileprivate func reloadData() {
+        tableRefreshControl.beginRefreshing()
+        tableView.contentOffset = CGPoint(x: 0, y: -tableRefreshControl.frame.size.height)
+
         service.obtainNews { (viewModels) in
             self.tableRefreshControl.endRefreshing()
         }

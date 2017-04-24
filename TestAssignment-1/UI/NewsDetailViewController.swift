@@ -13,13 +13,14 @@ class NewsDetailViewController: UIViewController {
     var service: NewsService!
     var contentID: Int?
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak private var contentTextView: UITextView!
     
     // MARK: - View Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         contentTextView.text = ""
         contentTextView.textContainerInset = UIEdgeInsetsMake(10, 10, 0, 10)
         
@@ -31,6 +32,7 @@ class NewsDetailViewController: UIViewController {
         }
         
         service.obtainNewsDetail(with: identifier) { [weak self] (error, viewModel) in
+            self?.activityIndicator.stopAnimating()
             guard let newsDetail = viewModel else {
                 // error
 //                self?.showAlert(with: error)
