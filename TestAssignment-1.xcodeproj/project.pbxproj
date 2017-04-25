@@ -21,7 +21,6 @@
 		093C43001EAF37BA00F9C666 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C42FF1EAF37BA00F9C666 /* ErrorHandler.swift */; };
 		093C43021EAF386200F9C666 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C43011EAF386200F9C666 /* AppDelegate.swift */; };
 		093C43061EAF387A00F9C666 /* String+html.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C43051EAF387A00F9C666 /* String+html.swift */; };
-		093C430A1EAF38BC00F9C666 /* NewsWebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C43081EAF38BC00F9C666 /* NewsWebService.swift */; };
 		093C430B1EAF38BC00F9C666 /* Transport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C43091EAF38BC00F9C666 /* Transport.swift */; };
 		093C430D1EAF38D300F9C666 /* NewsDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C430C1EAF38D300F9C666 /* NewsDetailViewModel.swift */; };
 		093C430F1EAF390900F9C666 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C430E1EAF390900F9C666 /* CoreDataStack.swift */; };
@@ -58,7 +57,6 @@
 		093C42FF1EAF37BA00F9C666 /* ErrorHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ErrorHandler.swift; path = Logic/ErrorHandler.swift; sourceTree = "<group>"; };
 		093C43011EAF386200F9C666 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = Supporting/AppDelegate.swift; sourceTree = "<group>"; };
 		093C43051EAF387A00F9C666 /* String+html.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+html.swift"; path = "Categories/String+html.swift"; sourceTree = "<group>"; };
-		093C43081EAF38BC00F9C666 /* NewsWebService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsWebService.swift; path = Logic/NewsWebService.swift; sourceTree = "<group>"; };
 		093C43091EAF38BC00F9C666 /* Transport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Transport.swift; path = Logic/Transport.swift; sourceTree = "<group>"; };
 		093C430C1EAF38D300F9C666 /* NewsDetailViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NewsDetailViewModel.swift; path = UI/NewsDetailViewModel.swift; sourceTree = "<group>"; };
 		093C430E1EAF390900F9C666 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataStack.swift; path = Logic/CoreData/CoreDataStack.swift; sourceTree = "<group>"; };
@@ -155,7 +153,6 @@
 				093C431B1EAF3C6700F9C666 /* ErrorHandler */,
 				09EC10331EAE9A4D001E861F /* NewsService.swift */,
 				09334E6E1E7EC35500F550B2 /* NewsServiceImplementation.swift */,
-				093C43081EAF38BC00F9C666 /* NewsWebService.swift */,
 			);
 			name = Logic;
 			sourceTree = "<group>";
@@ -376,7 +373,6 @@
 				093C43171EAF3B3300F9C666 /* NewsDetailParser.swift in Sources */,
 				093C431D1EAF418200F9C666 /* SessionManager.swift in Sources */,
 				096879161E883F5B006120BC /* NewsTableViewCell.swift in Sources */,
-				093C430A1EAF38BC00F9C666 /* NewsWebService.swift in Sources */,
 				093C430B1EAF38BC00F9C666 /* Transport.swift in Sources */,
 				09334E6F1E7EC35500F550B2 /* NewsServiceImplementation.swift in Sources */,
 				090CE4921E9135C2001C5DED /* FetchedResultsControllerDataSource.swift in Sources */,

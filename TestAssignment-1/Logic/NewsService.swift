@@ -9,6 +9,13 @@
 import Foundation
 import CoreData
 
+enum NewsServiceError: Error {
+    case noInternetConnection
+    case loadingFailed
+    case parsingFailed
+    case cachingFailed
+}
+
 typealias ErrorClosure = (Error?)->()
 
 /**

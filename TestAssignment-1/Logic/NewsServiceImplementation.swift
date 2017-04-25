@@ -11,10 +11,6 @@ import CoreData
 
 class NewsServiceImplementation: NewsService {
     
-    // MARK: - Init
-    
-    init() {}
-    
     // MARK: - Dependencies
     
     var transport: Transport!
@@ -42,40 +38,47 @@ class NewsServiceImplementation: NewsService {
                 return
             }
             
-            // парсинг
-            if  let jsonData = data as? [String:Any],
-                let newsList = self?.newsListParser.parse(json: jsonData) as? [NewsTitle] {
-                
-                // удаление лишних записей
-                // FIXME: тут может быть косяк с потоками
-                for title in newsList {
-                    if (self?.storedNewsIdentifiers.contains(title.identifier))! {
-                        self?.backgroundContext.perform {
-                            self?.backgroundContext.delete(title)
+            
+            let storedNewsIdentifiers = self?.storedNewsIdentifiers ?? Set<Int64>()
+            
+            self?.backgroundContext.perform {
+                // парсинг
+                if  let jsonData = data as? [String:Any],
+                    let newsList = self?.newsListParser.parse(json: jsonData) as? [NewsTitle] {
+                    
+                    // удаление лишних записей
+                    // FIXME: тут может быть косяк с потоками
+                    for title in newsList {
+                        if storedNewsIdentifiers.contains(title.identifier) {
+                            self?.backgroundContext.perform {
+                                self?.backgroundContext.delete(title)
+                            }
                         }
                     }
-                }
-                
-                // сохранение в базе
-                self?.coreDataStack.backgroundContext.perform {
-                    do {
-                        try self?.coreDataStack.backgroundContext.save()
-                        DispatchQueue.main.async {
-                            completion(nil)
-                        }
-                    } catch let error {
-                        print(error)
-                        print("failed to save data in context")
-                        assert(false)
-                        DispatchQueue.main.async {
-                            completion(error)
+                    
+                    // сохранение в базе
+                    self?.coreDataStack.backgroundContext.perform {
+                        do {
+                            try self?.coreDataStack.backgroundContext.save()
+                            DispatchQueue.main.async {
+                                completion(nil)
+                            }
+                        } catch let error {
+                            print(error)
+                            print("failed to save data in context")
+                            assert(false)
+                            DispatchQueue.main.async {
+                                completion(error)
+                            }
                         }
                     }
+                    return
+                } else {
+                    let parsingError = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
+                    DispatchQueue.main.async {
+                        completion(parsingError)
+                    }
                 }
-                return
-            } else {
-                let parsingError = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil);
-                completion(parsingError)
             }
         }
     }
@@ -109,35 +112,38 @@ class NewsServiceImplementation: NewsService {
                 return
             }
             
-            let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "identifier == %d", identifier)
-            
-            guard let newsTitle = try? self?.coreDataStack.backgroundContext.fetch(fetchRequest).first else {
-                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil);
+            guard let newsTitleObjectID = self?.objectIDForNewsTitle(with: identifier) else {
+                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
                 completion(err)
                 return
             }
-
-            if let jsonData = data as? [String:Any],
-                let newsDetail = self?.newsDetailsParser.parse(json: jsonData) as? NewsRecord {
-                newsTitle?.newsDetail = newsDetail
-                self?.backgroundContext.perform {
-                    do {
-                        try self?.backgroundContext.save()
-                        DispatchQueue.main.async {
-                            completion(nil)
-                        }
-                    } catch {
-                        print("details fetching error")
-                        DispatchQueue.main.async {
-                            let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil);
-                            completion(err)
+            
+            self?.backgroundContext.perform {
+                // parsing
+                if let jsonData = data as? [String:Any],
+                    let newsDetail = self?.newsDetailsParser.parse(json: jsonData) as? NewsRecord,
+                    let newsTitle = self?.backgroundContext.object(with: newsTitleObjectID) as? NewsTitle {
+                    newsTitle.newsDetail = newsDetail
+                    self?.backgroundContext.perform {
+                        do {
+                            try self?.backgroundContext.save()
+                            DispatchQueue.main.async {
+                                completion(nil)
+                            }
+                        } catch {
+                            print("details fetching error")
+                            DispatchQueue.main.async {
+                                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
+                                completion(err)
+                            }
                         }
                     }
+                } else {
+                    let parsingError = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
+                    DispatchQueue.main.async {
+                        completion(parsingError)
+                    }
                 }
-            } else {
-                let parsingError = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil);
-                completion(parsingError)
             }
         }
     }
@@ -171,4 +177,14 @@ class NewsServiceImplementation: NewsService {
         return storedNewsIDs
     }
 
+    func objectIDForNewsTitle(with identifier:Int) -> NSManagedObjectID? {
+        let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "identifier == %d", identifier)
+        
+        guard let newsTitleObjectID = try? coreDataStack.viewContext.fetch(fetchRequest).first?.objectID else {
+            return nil
+        }
+        
+        return newsTitleObjectID
+    }
 }
