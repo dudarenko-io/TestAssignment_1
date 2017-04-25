@@ -13,8 +13,6 @@
 		090CE4891E9008F1001C5DED /* NewsRecord+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090CE4851E9008F1001C5DED /* NewsRecord+CoreDataProperties.swift */; };
 		090CE4921E9135C2001C5DED /* FetchedResultsControllerDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 090CE4911E9135C2001C5DED /* FetchedResultsControllerDataSource.swift */; };
 		09334E591E7E9BBD00F550B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 09334E581E7E9BBD00F550B2 /* Assets.xcassets */; };
-		09334E651E7E9D9600F550B2 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 09334E641E7E9D9600F550B2 /* README */; };
-		09334E691E7E9DCB00F550B2 /* Backlog in Resources */ = {isa = PBXBuildFile; fileRef = 09334E681E7E9DCB00F550B2 /* Backlog */; };
 		09334E6D1E7EB43200F550B2 /* NewsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09334E6C1E7EB43200F550B2 /* NewsListViewController.swift */; };
 		09334E6F1E7EC35500F550B2 /* NewsServiceImplementation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09334E6E1E7EC35500F550B2 /* NewsServiceImplementation.swift */; };
 		093C42FC1EAF378F00F9C666 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 093C42FB1EAF378F00F9C666 /* Parser.swift */; };
@@ -33,7 +31,6 @@
 		096879121E882B63006120BC /* NewsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 096879111E882B63006120BC /* NewsDetailViewController.swift */; };
 		096879161E883F5B006120BC /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 096879151E883F5B006120BC /* NewsTableViewCell.swift */; };
 		09718B261EAF8CE60064CB4D /* TestAssignment_1.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 09718B241EAF8CE60064CB4D /* TestAssignment_1.xcdatamodeld */; };
-		09BC77931EAF8F6D0049D1E0 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 09BC77911EAF8EF30049D1E0 /* Info.plist */; };
 		09BC77941EAF8F700049D1E0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09718B1E1EAF8CBF0064CB4D /* LaunchScreen.storyboard */; };
 		09BC77951EAF8F730049D1E0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09718B211EAF8CCA0064CB4D /* Main.storyboard */; };
 		09EC10341EAE9A4D001E861F /* NewsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09EC10331EAE9A4D001E861F /* NewsService.swift */; };
@@ -271,7 +268,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0820;
-				LastUpgradeCheck = 0820;
+				LastUpgradeCheck = 0830;
 				ORGANIZATIONNAME = "Dudarenko Ilya";
 				TargetAttributes = {
 					09334E4A1E7E9BBC00F550B2 = {
@@ -304,9 +301,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				09BC77931EAF8F6D0049D1E0 /* Info.plist in Resources */,
-				09334E691E7E9DCB00F550B2 /* Backlog in Resources */,
-				09334E651E7E9D9600F550B2 /* README in Resources */,
 				09BC77951EAF8F730049D1E0 /* Main.storyboard in Resources */,
 				09BC77941EAF8F700049D1E0 /* LaunchScreen.storyboard in Resources */,
 				09334E591E7E9BBD00F550B2 /* Assets.xcassets in Resources */,
