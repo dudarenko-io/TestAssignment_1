@@ -43,8 +43,9 @@ class NewsListViewController: UITableViewController {
         tableRefreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
         tableView.refreshControl = tableRefreshControl
         
+        tableRefreshControl.beginRefreshing()
+        tableView.contentOffset = CGPoint(x: 0, y: -tableRefreshControl.frame.size.height)
         reloadData()
-        tableView.reloadData()
     }
     
     func setupDataSource() {
@@ -64,9 +65,6 @@ class NewsListViewController: UITableViewController {
     }
     
     @objc fileprivate func reloadData() {
-        tableRefreshControl.beginRefreshing()
-        tableView.contentOffset = CGPoint(x: 0, y: -tableRefreshControl.frame.size.height)
-        
         newsService.updateNewsList { [weak self] (error) in
             self?.tableRefreshControl.endRefreshing()
             if error != nil {

@@ -26,7 +26,7 @@ class NewsDetailViewController: UIViewController {
         
         automaticallyAdjustsScrollViewInsets = false
         
-        guard let identifier = contentID else {
+        guard contentID != nil else {
             // error
             return
         }
@@ -45,6 +45,7 @@ class NewsDetailViewController: UIViewController {
         if let newsDetail = service.obtainNewsDetail(with: identifier) {
             if let string = self.attributedText(for: newsDetail.content!) {
                 self.contentTextView.attributedText = string
+                activityIndicator.stopAnimating()
             } else {
                 // show processing error
                 print("processing error")

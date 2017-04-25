@@ -49,7 +49,7 @@ class NewsServiceImplementation: NewsService {
                 // удаление лишних записей
                 // FIXME: тут может быть косяк с потоками
                 for title in newsList {
-                    if self?.storedNewsIdentifiers.contains(title.identifier) != nil {
+                    if (self?.storedNewsIdentifiers.contains(title.identifier))! {
                         self?.backgroundContext.perform {
                             self?.backgroundContext.delete(title)
                         }
@@ -88,7 +88,6 @@ class NewsServiceImplementation: NewsService {
             return [NewsTitle]()
         }
         
-        assert(result.count == 1)
         return result
     }
     
@@ -110,9 +109,32 @@ class NewsServiceImplementation: NewsService {
                 return
             }
             
+            let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "identifier == %d", identifier)
+            
+            guard let newsTitle = try? self?.coreDataStack.backgroundContext.fetch(fetchRequest).first else {
+                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil);
+                completion(err)
+                return
+            }
+
             if let jsonData = data as? [String:Any],
                 let newsDetail = self?.newsDetailsParser.parse(json: jsonData) as? NewsRecord {
-                
+                newsTitle?.newsDetail = newsDetail
+                self?.backgroundContext.perform {
+                    do {
+                        try self?.backgroundContext.save()
+                        DispatchQueue.main.async {
+                            completion(nil)
+                        }
+                    } catch {
+                        print("details fetching error")
+                        DispatchQueue.main.async {
+                            let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil);
+                            completion(err)
+                        }
+                    }
+                }
             } else {
                 let parsingError = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil);
                 completion(parsingError)
@@ -148,76 +170,5 @@ class NewsServiceImplementation: NewsService {
         }
         return storedNewsIDs
     }
-    
-        
-        
-        
 
-    
-    // ------------------------------
-    
-//    func obtainNewsDetail(with identifier:Int, and completion:@escaping(Error?, NewsDetailViewModel?)->()){
-//        // проверка в базе
-//        // если есть, то показываем
-//        // если нет, то 
-//        // загружаем
-//        // парсим
-//        // кладем в базу
-//        self.coreDataStack.backgroundContext.perform {
-//            let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
-//            fetchRequest.predicate = NSPredicate(format: "identifier == %d", identifier)
-//            
-//            guard let result = try? self.coreDataStack.backgroundContext.fetch(fetchRequest) else {
-//                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
-//                DispatchQueue.main.async {
-//                    completion(err, nil)
-//                }
-//                return
-//            }
-//            
-//            assert(result.count == 1)
-//            
-//            let newsTitle = result.first
-//            if let newsDetail = newsTitle?.newsDetail {
-//                let viewModel = NewsDetailViewModel(with: newsDetail)
-//                DispatchQueue.main.async {
-//                    completion(nil, viewModel)
-//                }
-//                return
-//            }
-//            
-//            self.webService.fetchNewsDetail(with: identifier) { (error, json) in
-//                if error != nil {
-//                    // error
-//                    print("error loading data")
-//                    return
-//                }
-//                self.coreDataStack.backgroundContext.perform {
-//                    if let newsDetail = self.parser.deserializeNewsDetail(json) {
-//                        newsTitle?.newsDetail = newsDetail
-//                        do {
-//                            try self.coreDataStack.backgroundContext.save()
-//                        } catch {
-//                            print("failed to save data in context")
-//                            assert(false)
-//                            let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
-//                            DispatchQueue.main.async {
-//                                completion(err, nil)
-//                            }
-//                        }
-//                        
-//                        let viewModel = NewsDetailViewModel(with: newsDetail)
-//                        DispatchQueue.main.async {
-//                            completion(nil, viewModel)
-//                        }
-//                    } else {
-//                        let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
-//                        DispatchQueue.main.async {
-//                            completion(err, nil)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
 }
