@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 typealias ErrorClosure = (Error?)->()
 
@@ -19,16 +20,15 @@ protocol NewsService {
      Обновление списка новостей
      @param completion блок выполнится после получения списка новостей, может содержать ошибку
      */
-    func updateNewsList(with completion:@escaping ErrorClosure)
+    func updateNewsList(with completion: @escaping ErrorClosure)
     
     /**
      Получить список новостей
      */
-    func obtainNews()->([NewsCellViewModel])
+    func obtainNews()->([NewsTitle])
     
     /**
      NSFetchedResultsController для списка новостей
-     @param
      */
     var resultsController: NSFetchedResultsController<NewsTitle> {get}
     
@@ -37,11 +37,12 @@ protocol NewsService {
      @param identifier ID новости
      @param completion блок выполнится после получения информации, может содержать ошибку
      */
-    func updateNewsDetail(with identifier:Int, and completion:@escaping ErrorClosure)
+    func updateNewsDetail(with identifier:Int, and completion: @escaping ErrorClosure)
     
     /**
      Получить детальную информацию новости
      @param identifier ID новости
+     @return optional NewsRecord
      */
-    func obtainNewsDetail(with identifier:Int)->()
+    func obtainNewsDetail(with identifier: Int)->(NewsRecord?)
 }

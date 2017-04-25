@@ -31,22 +31,35 @@ class NewsDetailViewController: UIViewController {
             return
         }
         
-        service.obtainNewsDetail(with: identifier) { [weak self] (error, viewModel) in
-            self?.activityIndicator.stopAnimating()
-            guard let newsDetail = viewModel else {
-                // error
-//                self?.showAlert(with: error)
-                print("error")
-                return
-            }
+        reloadData()
+    }
+    
+    // MARK: - Reloading
+    
+    func reloadData() {
+        guard let identifier = contentID else {
+            // error
+            return
+        }
         
-            if let string = self?.attributedText(for: newsDetail.newsContent) {
-                self?.contentTextView.attributedText = string
+        if let newsDetail = service.obtainNewsDetail(with: identifier) {
+            if let string = self.attributedText(for: newsDetail.content!) {
+                self.contentTextView.attributedText = string
             } else {
                 // show processing error
                 print("processing error")
             }
+        } else {
+            service.updateNewsDetail(with: identifier, and: { (error) in
+                if error != nil {
+                    // alert
+                    return
+                }
+                
+                self.reloadData()
+            })
         }
+
     }
     
     // MARK: - Content Processing
