@@ -46,13 +46,10 @@ class NewsServiceImplementation: NewsService {
                 if  let jsonData = data as? [String:Any],
                     let newsList = self?.newsListParser.parse(json: jsonData) as? [NewsTitle] {
                     
-                    // удаление лишних записей
-                    // FIXME: тут может быть косяк с потоками
+                    // удаление лишних записей из контекста
                     for title in newsList {
                         if storedNewsIdentifiers.contains(title.identifier) {
-                            self?.backgroundContext.perform {
-                                self?.backgroundContext.delete(title)
-                            }
+                            self?.backgroundContext.delete(title)
                         }
                     }
                     
@@ -105,6 +102,7 @@ class NewsServiceImplementation: NewsService {
     }()
     
     func updateNewsDetail(with identifier:Int, and completion:@escaping ErrorClosure) {
+        // loading
         transport.execute(request: .getNewsDetail(identifier)) { [weak self] (error, data) in
             if error != nil {
                 let err = self?.errorHandler.handle(errors: [error!])
