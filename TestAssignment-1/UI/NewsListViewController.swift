@@ -11,7 +11,20 @@ import CoreData
 
 class NewsListViewController: UITableViewController {
     
-    let service = NewsService()
+    lazy var newsService: NewsService = {
+        let service = NewsServiceImplementation()
+        
+        let coreDataStack = CoreDataStack()
+        service.coreDataStack = coreDataStack
+
+        service.newsListParser = NewsListParser(with: coreDataStack.backgroundContext)
+        service.newsDetailsParser = NewsDetailParser(with: coreDataStack.backgroundContext)
+        service.transport = SessionManager()
+        service.errorHandler = ErrorHandlerImplementation()
+        
+        return service
+    }()
+    
     var dataSource: FetchedResultsControllerDataSource!
     
     fileprivate static let publicationDateKey = "publicationDate"
@@ -22,37 +35,45 @@ class NewsListViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        dataSource = FetchedResultsControllerDataSource(with: tableView)
-        let fetchRequest:NSFetchRequest<NewsTitle> = NewsTitle.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: NewsListViewController.publicationDateKey, ascending: false)]
-        let resultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
-                                                       managedObjectContext: service.viewContext,
-                                                       sectionNameKeyPath: nil,
-                                                       cacheName: nil)
-        do {
-            try resultsController.performFetch()
-        } catch {
-            
-        }
-        
-        resultsController.delegate = dataSource
-        dataSource.fetchedResultsController = resultsController
-        tableView.dataSource = dataSource
+        setupDataSource()
         
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 88
         
         tableRefreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
         tableView.refreshControl = tableRefreshControl
-        
+        tableView.contentOffset = CGPoint(x: 0, y: -tableRefreshControl.frame.size.height)
+        tableRefreshControl.layoutIfNeeded()
         tableRefreshControl.beginRefreshing()
+        
         reloadData()
-        tableView.reloadData()
+    }
+    
+    // MARK: - Data source and reloading
+    
+    func setupDataSource() {
+        let resultsController = self.newsService.resultsController
+        
+        self.dataSource = FetchedResultsControllerDataSource(with: self.tableView)
+        dataSource.fetchedResultsController = resultsController
+        
+        self.tableView.dataSource = dataSource
+        resultsController.delegate = dataSource
+        
+        do {
+            try resultsController.performFetch()
+        } catch {
+            
+        }
     }
     
     @objc fileprivate func reloadData() {
-        service.obtainNews { (viewModels) in
-            self.tableRefreshControl.endRefreshing()
+        newsService.updateNewsList { [weak self] (error) in
+            self?.tableRefreshControl.endRefreshing()
+            if error != nil {
+                self?.showAlert(with: error!)
+                return
+            }
         }
     }
 
@@ -62,8 +83,17 @@ class NewsListViewController: UITableViewController {
         if let detailVC = segue.destination as? NewsDetailViewController,
             let cell = sender as? NewsTableViewCell
         {
-            detailVC.service = service
+            detailVC.service = newsService
             detailVC.contentID = cell.newsIdentifier
         }
+    }
+    
+    // MARK: - Alert
+    
+    func showAlert(with error:Error) {
+        let alert = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ок", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
     }
 }

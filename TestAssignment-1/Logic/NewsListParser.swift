@@ -1,32 +1,28 @@
 //
-//  NewsParser.swift
+//  File.swift
 //  TestAssignment-1
 //
-//  Created by Dudarenko Ilya on 01/04/2017.
+//  Created by Dudarenko Ilya on 25.04.17.
 //  Copyright © 2017 Dudarenko Ilya. All rights reserved.
 //
 
 import Foundation
 import CoreData
 
-/**
- * Парсер json
- */
-class NewsParser {
+class NewsListParser: Parser {
     
     private let context: NSManagedObjectContext
     
     // MARK: - Init
     
-    init(with context:NSManagedObjectContext) {
+    required init(with context:NSManagedObjectContext) {
         self.context = context
     }
     
-    // MARK: - Public
+    // MARK: - Parser
     
-    // десериализация JSON списка новостей
-    func deserializeNewsList(_ json:[String:Any]) -> [NewsTitle]? {
-        if let payload = json["payload"] as? [[String:Any]] {
+    func parse(json data:[String:Any]) -> Any? {
+        if let payload = data["payload"] as? [[String:Any]] {
             var titles = [NewsTitle]()
             for item in payload {
                 let newsTitle = self.createNewsTitle()
@@ -50,18 +46,7 @@ class NewsParser {
             }
             return titles
         }
-        
         return nil
-    }
-    
-    // десериализация детальной информации новости
-    func deserializeNewsDetail(_ json:[String:Any]) -> NewsRecord? {
-        if let payload = json["payload"] as? [String:Any] {
-            let newsDetail = createNewsDetail()
-            newsDetail.content = payload["content"] as? String
-            return newsDetail
-        }
-        return nil;
     }
     
     // MARK: - Private
@@ -70,11 +55,5 @@ class NewsParser {
         let entity = NSEntityDescription.entity(forEntityName: NewsTitle.entityName, in: context)!
         let newsTitle = NewsTitle(entity: entity, insertInto: context)
         return newsTitle
-    }
-    
-    private func createNewsDetail() -> NewsRecord {
-        let entity = NSEntityDescription.entity(forEntityName: NewsRecord.entityName, in: context)!
-        let newsDetail = NewsRecord(entity: entity, insertInto: context)
-        return newsDetail
     }
 }
