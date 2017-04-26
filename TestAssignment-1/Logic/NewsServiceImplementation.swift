@@ -32,50 +32,41 @@ class NewsServiceImplementation: NewsService {
     func updateNewsList(with completion: @escaping ErrorClosure) {
         // запрос
         transport.execute(request: .getNewsList) { [weak self] (error, data) in
-            if error != nil {
-                let err = self?.errorHandler.handle(errors: [error!])
-                completion(err)
+            guard let `self` = self else{
                 return
             }
             
+            if error != nil {
+                let err = self.errorHandler.handle(errors: [error!])
+                completion(NewsServiceError.loadingFailed(err))
+                return
+            }
             
-            let storedNewsIdentifiers = self?.storedNewsIdentifiers ?? Set<Int64>()
+            let storedNewsIdentifiers = self.storedNewsIdentifiers
             
-            self?.backgroundContext.perform {
+            self.backgroundContext.perform {
                 // парсинг
-                if  let jsonData = data as? [String:Any],
-                    let newsList = self?.newsListParser.parse(json: jsonData) as? [NewsTitle] {
-                    
-                    // удаление лишних записей из контекста
-                    for title in newsList {
-                        if storedNewsIdentifiers.contains(title.identifier) {
-                            self?.backgroundContext.delete(title)
-                        }
-                    }
-                    
-                    // сохранение в базе
-                    self?.coreDataStack.backgroundContext.perform {
-                        do {
-                            try self?.coreDataStack.backgroundContext.save()
-                            DispatchQueue.main.async {
-                                completion(nil)
-                            }
-                        } catch let error {
-                            print(error)
-                            print("failed to save data in context")
-                            assert(false)
-                            DispatchQueue.main.async {
-                                completion(error)
-                            }
-                        }
-                    }
-                    return
-                } else {
-                    let parsingError = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
-                    DispatchQueue.main.async {
-                        completion(parsingError)
+                guard let jsonData = data as? [String:Any],
+                    let newsList = self.newsListParser.parse(json: jsonData) as? [NewsTitle] else {
+                        DispatchQueue.main.async { completion(NewsServiceError.parsingFailed) }
+                        return
+                }
+                
+                // удаление лишних записей из контекста
+                for title in newsList {
+                    if storedNewsIdentifiers.contains(title.identifier) {
+                        self.backgroundContext.delete(title)
                     }
                 }
+                
+                // сохранение в базе
+                var cacheError: Error?
+                do {
+                    try self.coreDataStack.backgroundContext.save()
+                } catch {
+                    cacheError = NewsServiceError.cachingFailed
+                }
+                DispatchQueue.main.async { completion(cacheError) }
             }
         }
     }
@@ -104,44 +95,38 @@ class NewsServiceImplementation: NewsService {
     func updateNewsDetail(with identifier:Int, and completion:@escaping ErrorClosure) {
         // loading
         transport.execute(request: .getNewsDetail(identifier)) { [weak self] (error, data) in
+            guard let `self` = self else{
+                return
+            }
+            
             if error != nil {
-                let err = self?.errorHandler.handle(errors: [error!])
-                completion(err)
+                let err = self.errorHandler.handle(errors: [error!])
+                completion(NewsServiceError.loadingFailed(err))
                 return
             }
             
-            guard let newsTitleObjectID = self?.objectIDForNewsTitle(with: identifier) else {
-                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
-                completion(err)
+            guard let newsTitleObjectID = self.objectIDForNewsTitle(with: identifier) else {
+                completion(NewsServiceError.cachingFailed)
                 return
             }
             
-            self?.backgroundContext.perform {
+            self.backgroundContext.perform {
                 // parsing
-                if let jsonData = data as? [String:Any],
-                    let newsDetail = self?.newsDetailsParser.parse(json: jsonData) as? NewsRecord,
-                    let newsTitle = self?.backgroundContext.object(with: newsTitleObjectID) as? NewsTitle {
-                    newsTitle.newsDetail = newsDetail
-                    self?.backgroundContext.perform {
-                        do {
-                            try self?.backgroundContext.save()
-                            DispatchQueue.main.async {
-                                completion(nil)
-                            }
-                        } catch {
-                            print("details fetching error")
-                            DispatchQueue.main.async {
-                                let err = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
-                                completion(err)
-                            }
-                        }
-                    }
-                } else {
-                    let parsingError = NSError(domain: "DIO.testAssignment1", code: 1, userInfo: nil)
-                    DispatchQueue.main.async {
-                        completion(parsingError)
-                    }
+                guard let jsonData = data as? [String:Any],
+                    let newsDetail = self.newsDetailsParser.parse(json: jsonData) as? NewsRecord,
+                    let newsTitle = self.backgroundContext.object(with: newsTitleObjectID) as? NewsTitle else {
+                        DispatchQueue.main.async { completion(NewsServiceError.parsingFailed) }
+                        return
                 }
+
+                newsTitle.newsDetail = newsDetail
+                var cacheError: Error?
+                do {
+                    try self.backgroundContext.save()
+                } catch {
+                    cacheError = NewsServiceError.cachingFailed
+                }
+                DispatchQueue.main.async { completion(cacheError) }
             }
         }
     }

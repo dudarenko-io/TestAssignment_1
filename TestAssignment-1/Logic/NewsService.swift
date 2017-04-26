@@ -11,7 +11,7 @@ import CoreData
 
 enum NewsServiceError: Error {
     case noInternetConnection
-    case loadingFailed
+    case loadingFailed(Error)
     case parsingFailed
     case cachingFailed
 }
