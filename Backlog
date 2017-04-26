@@ -11,20 +11,15 @@
 
 
 Tasks:
-- Core data stack
-- Network layer
-- Payload sorting
-- Master-detail UI
-- Pull-to-refresh
-- JSON содержит текст различной длины, в связи с этим следует использовать ячейки переменной высоты
-- Splash-screen
-
-С WKWebView для нормального отображения контента нужно использовать CSS.
-Буду отображать контент с использованием UITextView, контент обработаю с помощью NSAttributedString.
-
-
-Known issues:
-1. в деталке по некоторым новостям приходят картинки. Так как отображение текста происходит в UITexView с помощью NSAttributedString, то загрузка картинок происходит синхронно в главном потоке(!). Картинки отображаются в некорректном масштабе.
-Варинатны решения:
-- парсить html, удалять теги с содержимым. Нужно знать все используемые теги...
-- использовать WKWebView. Тогда нужен CSS, но опять же нужно знать все используемые теги.
+Logic:
++ Core data stack
++ Network layer
++ Payload sorting
++ Parser
+UI:
++ Master-detail UI
++ Pull-to-refresh
++ Loading indicators
++ UI error popups
++ Custom error handling
++ JSON содержит текст различной длины, в связи с этим следует использовать ячейки переменной высоты
