@@ -68,7 +68,7 @@ class NewsListViewController: UITableViewController {
         newsService.updateNewsList { [weak self] (error) in
             self?.tableRefreshControl.endRefreshing()
             if error != nil {
-                // alert
+                self?.showAlert(with: error!)
                 return
             }
         }
@@ -83,5 +83,14 @@ class NewsListViewController: UITableViewController {
             detailVC.service = newsService
             detailVC.contentID = cell.newsIdentifier
         }
+    }
+    
+    // MARK: - Alert
+    
+    func showAlert(with error:Error) {
+        let alert = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ок", style: .default)
+        alert.addAction(action)
+        self.present(alert, animated: true)
     }
 }

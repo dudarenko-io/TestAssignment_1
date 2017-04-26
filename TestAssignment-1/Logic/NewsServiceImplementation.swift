@@ -104,7 +104,7 @@ class NewsServiceImplementation: NewsService {
                 completion(NewsServiceError.loadingFailed(err))
                 return
             }
-            
+        
             guard let newsTitleObjectID = self.objectIDForNewsTitle(with: identifier) else {
                 completion(NewsServiceError.cachingFailed)
                 return

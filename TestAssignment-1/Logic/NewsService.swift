@@ -16,6 +16,21 @@ enum NewsServiceError: Error {
     case cachingFailed
 }
 
+extension NewsServiceError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .noInternetConnection:
+            return "Нет подключения к сети интернет"
+        case .loadingFailed(_):
+            return  "Не удалось получить данные"
+        case .parsingFailed:
+            return "Не удалось обработать данные"
+        case .cachingFailed:
+            return "Не удалось сохранить данные"
+        }
+    }
+}
+
 typealias ErrorClosure = (Error?)->()
 
 /**

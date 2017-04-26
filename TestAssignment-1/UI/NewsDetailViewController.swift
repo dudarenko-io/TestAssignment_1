@@ -47,17 +47,17 @@ class NewsDetailViewController: UIViewController {
                 self.contentTextView.attributedText = string
                 activityIndicator.stopAnimating()
             } else {
-                // show processing error
-                print("processing error")
+                let userInfo = [NSLocalizedDescriptionKey: "Не удалось отобразить данные"]
+                let error = NSError(domain: "DIO.test-assignment", code: 1, userInfo: userInfo)
+                self.showAlert(with: error)
             }
         } else {
-            service.updateNewsDetail(with: identifier, and: { (error) in
-                if error != nil {
-                    // alert
+            service.updateNewsDetail(with: identifier, and: { [weak self] (error) in
+                guard error == nil else {
+                    self?.showAlert(with: error!)
                     return
                 }
-                
-                self.reloadData()
+                self?.reloadData()
             })
         }
 
@@ -92,11 +92,14 @@ class NewsDetailViewController: UIViewController {
         return (attributedString.copy() as! NSAttributedString)
     }
     
+    // MARK: - Alert
+    
     func showAlert(with error:Error) {
         let alert = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
         let action = UIAlertAction(title: "Ок", style: .default) { _ in
             let _ = self.navigationController?.popViewController(animated: true)
         }
         alert.addAction(action)
+        self.present(alert, animated: true)
     }
 }
