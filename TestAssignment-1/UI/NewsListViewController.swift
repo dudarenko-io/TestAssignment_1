@@ -42,11 +42,14 @@ class NewsListViewController: UITableViewController {
         
         tableRefreshControl.addTarget(self, action: #selector(reloadData), for: .valueChanged)
         tableView.refreshControl = tableRefreshControl
-        
-        tableRefreshControl.beginRefreshing()
         tableView.contentOffset = CGPoint(x: 0, y: -tableRefreshControl.frame.size.height)
+        tableRefreshControl.layoutIfNeeded()
+        tableRefreshControl.beginRefreshing()
+        
         reloadData()
     }
+    
+    // MARK: - Data source and reloading
     
     func setupDataSource() {
         let resultsController = self.newsService.resultsController
